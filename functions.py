@@ -1,4 +1,5 @@
 import json as j
+from classes import Parrot
 
 def load_config():
     with open("config.json", "r") as file:
@@ -10,24 +11,31 @@ def load_relay_info():
     with open("relay_info.json", "r") as file:
         keywords = file.read()
     file.close()
-    keywords = j.loads(keywords)["keywords"]
+    channels = j.loads(keywords)["channels"]
 
-    keywords_list = []
-    keywords_to_channels_dict = {}
-    channels_list = []
+    channelsToParrot = {}
+    for channel in channels:
+        newParrot = Parrot(channels[channel]["keywords"])
+        channelsToParrot[channel] = newParrot
 
-    for keyword in keywords:
-        keywords_list.append(keyword["keyword"])
-        keywords_to_channels_dict[keyword["keyword"]] = keyword["channel_ids"]
-        channels_list += keyword["channel_ids"]
-
-    return keywords_list, keywords_to_channels_dict, set(channels_list)
+    return channelsToParrot
 
 def save_relay_info(info):
-    to_save = {"keywords": []}
+    channelIDToParrot = {}
+
     for key in info:
-        to_save["keywords"].append({"keyword": key, "channel_ids": info[key]})
-    
+        parrotObj = info[key]
+        keywordsList = []
+        for keyword in parrotObj.keywords:
+            keywordsList.append({
+                "positive": keyword.positiveKeywords,
+                "negative": keyword.negativeKeywords,
+                "channelsToSendTo": keyword.channelsToSendTo
+            })
+        keywordsDict = {"keywords": keywordsList}
+        channelIDToParrot[key] = keywordsDict
+    toSave = {"channels": channelIDToParrot}
+
     with open("relay_info.json", "w") as file:
-        j.dump(to_save, file)
+        j.dump(toSave, file)
         file.close()
