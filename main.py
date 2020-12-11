@@ -67,8 +67,10 @@ async def channels(ctx, *args):
     for channel in channels_dict:
         channelName = bot.get_channel(channel).name
         embedFieldText.append("Channel Name: **{}** Keywords: **{}**".format(channelName, '**, **'.join(channels_dict[channel])))
-    
-    embed.add_field(name="Channels", value='\n'.join(embedFieldText), inline=False)
+    if len(embedFieldText) > 0:
+        embed.add_field(name="Channels", value='\n'.join(embedFieldText), inline=False)
+    else:
+        embed.add_field(name="Channels", value="No channels have been set up!", inline=False)
     await ctx.message.channel.send(embed=embed)
         
 
