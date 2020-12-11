@@ -17,7 +17,7 @@ KEYWORDS_TO_CHANNELS = load_relay_info()
 
 async def resend(embed, channelID):
     global KEYWORDS_TO_CHANNELS
-    
+
     # Combine title, description and author name for easy searching
     title = "" if embed.title == Embed.Empty else embed.title 
     desc = "" if embed.description == Embed.Empty else embed.description 
