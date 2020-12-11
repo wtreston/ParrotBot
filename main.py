@@ -23,12 +23,21 @@ async def resend(embed, channelID):
     desc = "" if embed.description == Embed.Empty else embed.description 
     author = "" if embed.author.name == Embed.Empty else embed.author.name
     
-    message = ' '.join([embed.title, embed.description, embed.author.name]).lower()
+    message = ' '.join([title, desc, author]).lower()
 
-    embedFields = embed.fields
-    for field in range(0, len(embed.fields)):
-        if embedFields[field].name or embedFields[field].value == "":
-            embed.remove_field(field)
+    dictEmbed = embed.to_dict()
+    try:
+        fields = dictEmbed["fields"]
+
+        for field in range(0, len(fields)):
+            if fields[field]["name"] == "":
+                fields[field]["name"] = "** **"
+            if fields[field]["value"] == "":
+                fields[field]["value"] = "** **"     
+    except:
+        pass
+    
+    dictEmbed["fields"] = fields
 
     try:
         channelsToResendSendTo = KEYWORDS_TO_CHANNELS[str(channelID)].get_channels_to_send_to(message)
@@ -37,7 +46,7 @@ async def resend(embed, channelID):
 
     for channelID in channelsToResendSendTo:
         channel = bot.get_channel(channelID)
-        await channel.send(embed=embed)
+        await channel.send(embed=Embed.from_dict(dictEmbed))
 
 # Listen for messages
 @bot.listen('on_message')
