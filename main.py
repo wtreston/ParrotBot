@@ -17,12 +17,18 @@ KEYWORDS_TO_CHANNELS = load_relay_info()
 
 async def resend(embed, channelID):
     global KEYWORDS_TO_CHANNELS
-    
+
     # Combine title, description and author name for easy searching
-    try:
-        message = ' '.join([embed.title, embed.description, embed.author.name]).lower()
-    except:
-        return
+    title = "" if embed.title == Embed.Empty else embed.title 
+    desc = "" if embed.description == Embed.Empty else embed.description 
+    author = "" if embed.author.name == Embed.Empty else embed.author.name
+    
+    message = ' '.join([embed.title, embed.description, embed.author.name]).lower()
+
+    embedFields = embed.fields
+    for field in range(0, len(embed.fields)):
+        if embedFields[field].name or embedFields[field].value == "":
+            embed.remove_field(field)
 
     try:
         channelsToResendSendTo = KEYWORDS_TO_CHANNELS[str(channelID)].get_channels_to_send_to(message)
