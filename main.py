@@ -81,7 +81,7 @@ async def add(ctx, *args):
     global CHANNELS
     global KEYWORDS_TO_CHANNELS
 
-    if not ctx.message.author.guild_permissions.administrator:
+    if not ctx.message.author.guild_permissions.manage_channels:
         return
     
     await ctx.message.channel.send("You have started the process of adding a relay channel.")
@@ -117,7 +117,7 @@ async def remove(ctx, *args):
     global CHANNELS
     global KEYWORDS_TO_CHANNELS
 
-    if not ctx.message.author.guild_permissions.administrator:
+    if not ctx.message.author.guild_permissions.manage_channels:
         return
 
     await ctx.message.channel.send("You have started the process of removing a relay channel. Please tag the channel you wish to remove in your next message!")
@@ -155,7 +155,7 @@ async def remove(ctx, *args):
 
 @bot.command()
 async def commands(ctx, *args):
-    if not ctx.message.author.guild_permissions.administrator:
+    if not ctx.message.author.guild_permissions.manage_channels:
         return
 
     await ctx.message.channel.send(">>parrot channels -> Returns all the channel links and their keywords\n>>parrot add -> Start the process of creating a new channel link\n>>parrot remove -> Start the process of removing a channel link\n>>parrot commands -> Returns a list of available commands")
