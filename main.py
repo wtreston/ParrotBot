@@ -1,7 +1,6 @@
 # Library imports
 from discord import Embed
 from discord.ext.commands import Bot, has_permissions
-import threading
 import re
 
 # Custom file imports
