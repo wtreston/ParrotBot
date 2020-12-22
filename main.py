@@ -146,9 +146,9 @@ async def add(ctx, *args):
     negativeKeywords = []
     for keyword in keywords.content.split(','):
         if keyword.startswith("+"):
-            positiveKeywords.append(keyword[1::])
+            positiveKeywords.append(keyword[1::].lower())
         elif keyword.startswith("-"):
-            negativeKeywords.append(keyword[1::])
+            negativeKeywords.append(keyword[1::].lower())
         else:
             await ctx.message.channel.send("{} wasn't prefixed with a `+` or `-`. Ignoring it and using the rest of the keywords!".format(keyword))
 
